@@ -11,6 +11,8 @@ A multimodal content moderation system that uses **Natural Language Processing (
 * **Persistent Storage**: Automatically logs all user inputs, generated captions, and model predictions to **MongoDB**.
 * **Modern Web UI**: A clean, single-page interface with real-time feedback.
 
+<img width="633" height="326" alt="image" src="https://github.com/user-attachments/assets/b9a92bd7-51d6-4963-a2a6-684955215e4b" />
+
 ---
 
 ## 🏗️ Project Architecture
