@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Safety Guard</title>
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding-top: 50px; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 600px; }
+        
+        /* Flexbox for the input line */
+        .input-line { display: flex; gap: 10px; margin-bottom: 20px; }
+        input[type="text"] { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; }
+        
+        .btn { cursor: pointer; border: none; border-radius: 6px; font-weight: 600; padding: 12px 20px; transition: 0.2s; }
+        .btn-upload { background: #6c757d; color: white; }
+        .btn-submit { background: #007bff; color: white; }
+        .btn:hover { opacity: 0.9; }
+
+        .output-section { border-top: 2px solid #f0f0f0; margin-top: 20px; padding-top: 20px; display: none; }
+        .processed-text { background: #f8f9fa; padding: 10px; border-left: 4px solid #007bff; margin: 10px 0; font-style: italic; color: #444; }
+        .prediction-label { font-size: 24px; font-weight: bold; color: #d93025; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Content Analysis</h2>
+    
+    <div class="input-line">
+        <input type="text" id="userText" placeholder="Enter text to analyze...">
+        <input type="file" id="userFile" hidden accept="image/*">
+        <button class="btn btn-upload" onclick="document.getElementById('userFile').click()">📷 Image</button>
+        <button class="btn btn-submit" onclick="submitAnalysis()">Analyze</button>
+    </div>
+
+    <div id="outputArea" class="output-section">
+        <strong>Model Input (Extracted/Typed):</strong>
+        <div id="dispProcessed" class="processed-text"></div>
+        
+        <strong>Classification Result:</strong>
+        <div id="dispLabel" class="prediction-label"></div>
+        <div id="dispScore" style="color: #666; font-size: 14px;"></div>
+    </div>
+</div>
+
+<script>
+    async function submitAnalysis() {
+        const text = document.getElementById('userText').value;
+        const fileInput = document.getElementById('userFile');
+        const outputArea = document.getElementById('outputArea');
+
+        const formData = new FormData();
+        formData.append("text", text);
+        if (fileInput.files[0]) {
+            formData.append("file", fileInput.files[0]);
+        }
+
+        document.getElementById('dispLabel').innerText = "Analyzing...";
+        outputArea.style.display = "block";
+
+        try {
+            const response = await fetch("http://127.0.0.1:8000/process", {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+
+            document.getElementById('dispProcessed').innerText = data.processed_text;
+            document.getElementById('dispLabel').innerText = data.result;
+            document.getElementById('dispScore').innerText = "Confidence: " + data.score;
+        } catch (error) {
+            document.getElementById('dispLabel').innerText = "Error: Backend Unreachable";
+        }
+    }
+</script>
+
+</body>
+</html>
