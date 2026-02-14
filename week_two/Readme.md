@@ -1,7 +1,3 @@
-This README provides a comprehensive overview of your **AI Safety Auditor** project, covering setup, architecture, and usage.
-
----
-
 # 🛡️ AI Safety Auditor
 
 A multimodal content moderation system that uses **Natural Language Processing (NLP)** and **Computer Vision** to detect toxic content. The system accepts text or images, generates captions for images using a BLIP model, and classifies the resulting text into one of nine safety categories using a DistilBERT model optimized with LoRA.
