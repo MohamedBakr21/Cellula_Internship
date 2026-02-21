@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RAG Assistant</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background: #f4f4f9; }
+        #chat-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input { width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        #response { margin-top: 20px; white-space: pre-wrap; line-height: 1.6; color: #333; }
+    </style>
+</head>
+<body>
+    <div id="chat-box">
+        <h2>RAG Assistant</h2>
+        <input type="text" id="query" placeholder="Ask about atoms...">
+        <button onclick="sendQuery()">Ask</button>
+        <div id="response"></div>
+    </div>
+
+    <script>
+        async function sendQuery() {
+            const query = document.getElementById('query').value;
+            const resDiv = document.getElementById('response');
+            resDiv.innerText = "Thinking...";
+            
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text: query})
+            });
+            const data = await response.json();
+            resDiv.innerText = data.answer;
+        }
+    </script>
+</body>
+</html>
